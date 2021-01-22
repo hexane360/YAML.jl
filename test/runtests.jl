@@ -255,6 +255,19 @@ const testdir = dirname(@__FILE__)
     end
 end
 
+@testset "collect" begin
+    iter = YAML.load_all(
+        """
+        ---
+        doc1
+        ---
+        doc2
+        """
+    )
+    @test eltype(iter) == Any
+    @test collect(iter) == ["doc1", "doc2"]
+end
+
 const encodings = [
     enc"UTF-8", enc"UTF-16BE", enc"UTF-16LE", enc"UTF-32BE", enc"UTF-32LE"
 ]

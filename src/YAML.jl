@@ -3,7 +3,7 @@ __precompile__(true)
 module YAML
 
 import Base: isempty, length, show, peek
-import Base: iterate
+import Base: iterate, IteratorSize, IteratorEltype
 
 using Base64: base64decode
 using Dates
@@ -81,6 +81,9 @@ done(it::YAMLDocIterator, state) = it.next_doc === nothing
 # 0.7 iteration protocol:
 iterate(it::YAMLDocIterator) = next(it, start(it))
 iterate(it::YAMLDocIterator, s) = done(it, s) ? nothing : next(it, s)
+
+IteratorSize(::Type{YAMLDocIterator}) = Base.SizeUnknown()
+IteratorEltype(::Type{YAMLDocIterator}) = Base.EltypeUnknown()
 
 load_all(input::IO, args...; kwargs...) =
     YAMLDocIterator(input, args...; kwargs...)
